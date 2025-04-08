@@ -1,18 +1,22 @@
 .PHONY: all clean frontend middlend backend
 
-all: frontend middlend backend
+all: frontend middlend backend tree
 
 frontend:
-	@echo "Запуск frontend"
+	@echo "Сборка frontend"
 	$(MAKE) -C frontend
 
 middlend:
-	@echo "Запуск middlend"
+	@echo "Сборка middlend"
 	$(MAKE) -C middlend
 
 backend:
-	@echo "Запуск backend"
+	@echo "Сборка backend"
 	$(MAKE) -C backend
+
+tree:
+	@echo "Сборка tree"
+	$(MAKE) -C tree
 
 clean:
 	@echo "Очистка всех подпроектов"
