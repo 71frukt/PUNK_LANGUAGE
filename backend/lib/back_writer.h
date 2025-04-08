@@ -7,7 +7,7 @@
 
 #define BASE_OUTPUT_ASM_FILE_NAME  "../../executable.asm"
 
-#define MAIN_FUNC_NAME  "GOIDA"
+#define MAIN_FUNC_NAME  "MAIN_HOI"
 
 #ifndef COMMENT_SYMBOL
 #define COMMENT_SYMBOL  ';'

@@ -77,28 +77,28 @@ const int MATH_OPERATIONS_NUM = 15;
 
 const MathOperation MathOperations[MATH_OPERATIONS_NUM] = 
 {
-    { BOOL_EQ,      "будто",       "==",  "JNE",  BINARY, INFIX,  IsEqual    },
-    { BOOL_NEQ,     "!=",       "!=",  "JE",   BINARY, INFIX,  IsNotEqual },
-    { BOOL_LOWER,   "<",        "\\<", "JA",   BINARY, INFIX,  IsBelow    },         // JA для JB специально 
-    { BOOL_GREATER, ">",        "\\>", "JB",   BINARY, INFIX,  IsAbove    },         // JB для JA специально   
-    { ADD,          "+",        "+",   "ADD",  BINARY, INFIX,  Add        },
-    { SUB,          "-",        "-",   "SUB",  BINARY, INFIX,  Sub        },
-    { MUL,          "*",        "*",   "MUL",  BINARY, INFIX,  Mul        },
-    { DIV,          "/",        "/",   "DIV",  BINARY, INFIX,  Div        },
-    { SQRT,         "корень",   "cor", "SQRT", UNARY,  PREFIX, Sqrt       },
-    { DEG,          "^",        "^",   NULL,   BINARY, INFIX,  Deg        },
-   
-    { LN,           "лн",       "ln",  NULL,   UNARY,  PREFIX, Ln        },
-    { LOG,          "лог",      "log", NULL,   BINARY, PREFIX, Log       },
-   
-    { SIN,          "син",      "sin", "SIN",  UNARY,  PREFIX, Sin       },
-    { COS,          "кос",      "cos", "COS",  UNARY,  PREFIX, Cos       },
-    { TAN,          "тан",      "tg",  "TG",   UNARY,  PREFIX, Tan       }
+    { BOOL_EQ,      "будто",      "==",  "JNE",  BINARY, INFIX,  IsEqual    },
+    { BOOL_NEQ,     "ну_нафиг",   "!=",  "JE",   BINARY, INFIX,  IsNotEqual },
+    { BOOL_LOWER,   "хиленький",  "\\<", "JA",   BINARY, INFIX,  IsBelow    },         // JA для JB специально 
+    { BOOL_GREATER, "мощный",     "\\>", "JB",   BINARY, INFIX,  IsAbove    },         // JB для JA специально   
+    { ADD,          "накину",     "+",   "ADD",  BINARY, INFIX,  Add        },
+    { SUB,          "сдеру",      "-",   "SUB",  BINARY, INFIX,  Sub        },
+    { MUL,          "помножу",    "*",   "MUL",  BINARY, INFIX,  Mul        },
+    { DIV,          "порублю",    "/",   "DIV",  BINARY, INFIX,  Div        },
+    { SQRT,         "накорню",    "cor", "SQRT", UNARY,  PREFIX, Sqrt       },
+    { DEG,          "вздыбить",   "^",   NULL,   BINARY, INFIX,  Deg        },
+     
+    { LN,           "натурально", "ln",  NULL,   UNARY,  PREFIX, Ln        },
+    { LOG,          "лог",        "log", NULL,   BINARY, PREFIX, Log       },
+     
+    { SIN,          "син",        "sin", "SIN",  UNARY,  PREFIX, Sin       },
+    { COS,          "кос",        "cos", "COS",  UNARY,  PREFIX, Cos       },
+    { TAN,          "тан",        "tg",  "TG",   UNARY,  PREFIX, Tan       }
 };
 
 // const MathOperation MathOperations[MATH_OPERATIONS_NUM] = 
 // {
-//     { BOOL_EQ,      "==",       "==",  "JNE",  BINARY, INFIX,  IsEqual    },
+//     { BOOL_EQ,      "будто",    "==",  "JNE",  BINARY, INFIX,  IsEqual    },
 //     { BOOL_NEQ,     "!=",       "!=",  "JE",   BINARY, INFIX,  IsNotEqual },
 //     { BOOL_LOWER,   "<",        "\\<", "JA",   BINARY, INFIX,  IsBelow    },         // JA для JB специально 
 //     { BOOL_GREATER, ">",        "\\>", "JB",   BINARY, INFIX,  IsAbove    },         // JB для JA специально   
@@ -139,11 +139,11 @@ const int MANAGE_ELEMS_NUM = 5;
 
 const ManageElem Managers[MANAGE_ELEMS_NUM] = 
 {
-    { OPEN_BLOCK_BRACKET,  "панки_хой", "{"   },
+    { OPEN_BLOCK_BRACKET,  "панки_хой",    "{"   },
     { CLOSE_BLOCK_BRACKET, "попса_отстой", "}"   },
-    { OPEN_EXPR_BRACKET,   "желаешь", "("   },
-    { CLOSE_EXPR_BRACKET,  "расскажу", ")"   },
-    { EOT,                 "$", "EOT" }
+    { OPEN_EXPR_BRACKET,   "желаешь",      "("   },
+    { CLOSE_EXPR_BRACKET,  "расскажу",     ")"   },
+    { EOT,                 "$",            "EOT" }
 };
 
 
@@ -191,16 +191,16 @@ const KeyWord KeyWords[KEY_WORDS_NUM] =
     { VAR_T_INDICATOR,  "",      "var_t"     },
     { FUNC_T_INDICATOR, "",      "func_t"    },
     { FUNC_CALL,        "",      "call"      },
-    { INT_INIT,         "целый",   "int"       },
+    { INT_INIT,         "целый", "int"       },
     { DOUBLE_INIT,      "дабл",  "double"    },
-    { NEW_EXPR,         "хой",     "new_line"  },
-    { COMMA,            ",",     "param"     },
+    { NEW_EXPR,         "хой",   "new_line"  },
+    { COMMA,            "вместе","param"     },
     { NEW_FUNC,         "",      "new_func"  },
-    { ASSIGN,           "теперь" ,    "="         },
+    { ASSIGN,           "теперь","="         },
     { IF,               "коль",  "if"        },
     { WHILE,            "пока",  "while"     },
     { RETURN,           "лес",   "return"    },
-    { SPU_IN,           "почитаю",  "scanf"     },
+    { SPU_IN,           "почитаю","scanf"     },
     { SPU_OUT,          "болтал", "printf"    },
 };
 

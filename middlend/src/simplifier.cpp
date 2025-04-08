@@ -14,7 +14,7 @@ void SimplifyTree(Tree *code_tree)
         was_simplified = false;
         fprintf(stderr, "simplify\n");
         SimplifyConstants  (code_tree, code_tree->root_ptr, &was_simplified);
-        DelNeutralElements (code_tree, code_tree->root_ptr, &was_simplified);
+        // DelNeutralElements (code_tree, code_tree->root_ptr, &was_simplified);
     }
     while (was_simplified);
 

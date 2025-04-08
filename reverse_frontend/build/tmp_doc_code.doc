@@ -4,7 +4,7 @@ edge [color = "aqua"];
 node_000002e619bd6680 [shape = "egg", style = filled, fillcolor = "tan", label = "new_func"]
 node_000002e619bd66d0 [shape = "egg", style = filled, fillcolor = "tan", label = "int"]
 node_000002e619bd6720 [shape = "egg", style = filled, fillcolor = "tan", label = "func_t"]
-node_000002e619bd6770 [shape = "square", style = filled, fillcolor = "darkturquoise", label = "GOIDA"]
+node_000002e619bd6770 [shape = "square", style = filled, fillcolor = "darkturquoise", label = "MAIN_HOI"]
 node_000002e619bd67c0 [shape = "egg", style = filled, fillcolor = "tan", label = "param"]
 node_000002e619bd6810 [shape = "egg", style = filled, fillcolor = "tan", label = "int"]
 node_000002e619bd6860 [shape = "egg", style = filled, fillcolor = "tan", label = "var_t"]

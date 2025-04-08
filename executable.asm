@@ -7,12 +7,12 @@ POP BX
 PUSH AX                    
 PUSH 0                   
 
-CALL GOIDA:   
+CALL MAIN_HOI:   
 SPU_OUT                    
 HLT                        
 
-	; инициализация функции 'GOIDA'   
-GOIDA:
+	; инициализация функции 'MAIN_HOI'   
+MAIN_HOI:
 
 	; инициализация переменной 'arg'   
 
@@ -187,7 +187,7 @@ SPU_OUT
 PUSH 0
 
 RET
-	; конец инициализации функции 'GOIDA'   
+	; конец инициализации функции 'MAIN_HOI'   
 
 	; инициализация функции 'Linerial'   
 Linerial:
