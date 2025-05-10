@@ -1,0 +1,4 @@
+digraph G{               
+bgcolor = "darkslategray";      
+edge [color = "aqua"]; 
+} 

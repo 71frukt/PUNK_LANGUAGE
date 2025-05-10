@@ -188,20 +188,20 @@ const int KEY_WORDS_NUM = 14;
 
 const KeyWord KeyWords[KEY_WORDS_NUM] = 
 {
-    { VAR_T_INDICATOR,  "",      "var_t"     },
-    { FUNC_T_INDICATOR, "",      "func_t"    },
-    { FUNC_CALL,        "",      "call"      },
-    { INT_INIT,         "целый", "int"       },
-    { DOUBLE_INIT,      "дабл",  "double"    },
-    { NEW_EXPR,         "хой",   "new_line"  },
-    { COMMA,            "вместе","param"     },
-    { NEW_FUNC,         "",      "new_func"  },
-    { ASSIGN,           "теперь","="         },
-    { IF,               "коль",  "if"        },
-    { WHILE,            "пока",  "while"     },
-    { RETURN,           "лес",   "return"    },
-    { SPU_IN,           "почитаю","scanf"     },
-    { SPU_OUT,          "болтал", "printf"    },
+    { VAR_T_INDICATOR,  ""        , "var_t"     },
+    { FUNC_T_INDICATOR, ""        , "func_t"    },
+    { FUNC_CALL,        ""        , "call"      },
+    { INT_INIT,         "целый"   , "int"       },
+    { DOUBLE_INIT,      "дабл"    , "double"    },
+    { NEW_EXPR,         "хой"     , "new_line"  },
+    { COMMA,            "вместе"  , "param"     },
+    { NEW_FUNC,         ""        , "new_func"  },
+    { ASSIGN,           "теперь"  , "="         },
+    { IF,               "коль"    , "if"        },
+    { WHILE,            "пока"    , "while"     },
+    { RETURN,           "лес"     , "return"    },
+    { SPU_IN,           "почитаю" , "scanf"     },
+    { SPU_OUT,          "болтал"  , "printf"    },
 };
 
 // const KeyWord KeyWords[KEY_WORDS_NUM] = 

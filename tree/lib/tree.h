@@ -3,10 +3,7 @@
 
 #include <stdio.h>
 
-#define TREE_DEBUG
-
 #include "tree_elem_t_info.h"
-
 #include "operations.h"
 
 const int TREE_ALLOC_MARKS_NUM = 20;
@@ -14,6 +11,8 @@ const int START_TREE_SIZE      = 100;
 const int TOKEN_LEN            = 50;
 
 const int START_NAMES_TABLE_CAPA = 10;
+
+const size_t ERROR_NAME_LEN = 100;
 
 const TreeElem_t POISON_VAL = 0xDEB11;
 
@@ -50,7 +49,7 @@ struct ProperName
     char   name[TOKEN_LEN];
 
     size_t args_count;
-    bool is_init;
+    bool   is_init;
 };
 
 struct NamesTable
@@ -67,7 +66,7 @@ struct Block
     NamesTable names_table;
     Node *prev_block;
 
-    size_t shift;   // глобальное смещение относительно первого блока (блока функции)
+    size_t shift;       // global offset relative to the block (function block)
 };
 
 union NodeVal
@@ -115,36 +114,36 @@ struct Tree
     ON_TREE_DEBUG(const char *name);
 };
 
-void    TreeCtor      (Tree *tree, size_t start_capacity ON_TREE_DEBUG(, const char *name));
-void    TreeDtor      (Tree *tree);
-void    TreeRecalloc  (Tree *tree, size_t new_capacity);
-Node   *NewNode       (Tree *tree, NodeType type, NodeVal val, Node *left, Node *right);
-void    RemoveNode    (Tree *tree, Node **node);
-void    RemoveSubtree (Tree *tree, Node **start_node);
-Node   *TreeCopyPaste (Tree *source_tree, Tree *dest_tree, Node *coping_node);
-size_t  GetTreeHeight (Node *cur_node);
-char   *NodeValToStr  (Node *node);
+void        TreeCtor                (Tree *tree, size_t start_capacity ON_TREE_DEBUG(, const char *name));
+void        TreeDtor                (Tree *tree);
+void        TreeRecalloc            (Tree *tree, size_t new_capacity);
+Node       *NewNode                 (Tree *tree, NodeType type, NodeVal val, Node *left, Node *right);
+void        RemoveNode              (Tree *tree, Node **node);
+void        RemoveSubtree           (Tree *tree, Node **start_node);
+Node       *TreeCopyPaste           (Tree *source_tree, Tree *dest_tree, Node *coping_node);
+size_t      GetTreeHeight           (Node *cur_node);
+char       *NodeValToStr            (Node *node);
 
-ProperName *FindNameInTable (NamesTable *table, char *name);
-ProperName *FindNameInBlock (Node   *cur_block, char *name);
-ProperName *NewNameInTable  (NamesTable *table, char *name);
+ProperName *FindNameInTable         (NamesTable *table, char *name);
+ProperName *FindNameInBlock         (Node   *cur_block, char *name);
+ProperName *NewNameInTable          (NamesTable *table, char *name);
 
-void GetBlockNamesTable       (Tree *tree, Node *block, Node *cur_node);
-void MakeNamesTablesForBlocks (Tree *tree, Node *cur_node);
+void        GetBlockNamesTable      (Tree *tree, Node *block, Node *cur_node);
+void        MakeNamesTablesForBlocks(Tree *tree, Node *cur_node);
 
-Node *GetNodeInfoBySymbol(char *sym, Tree *tree, Node *cur_node, SymbolMode mode);
+Node       *GetNodeInfoBySymbol     (char *sym, Tree *tree, Node *cur_node, SymbolMode mode);
 
-void    NamesTableCtor  (size_t start_capa, NamesTable *table);
-void    NamesTableDtor  (NamesTable *table);
+void        NamesTableCtor          (size_t start_capa, NamesTable *table);
+void        NamesTableDtor          (NamesTable *table);
 
-size_t  GetCountOfArgs  (Node *func_node);
+size_t      GetCountOfArgs          (Node *func_node);
 
-bool    SubtreeContainsType   (Node *cur_node, NodeType type);
-bool    OpNodeIsCommutativity (Node *op_node);
-bool    IsInitialise          (Node *node);
-bool    IsBool                (Node *node);
+bool        SubtreeContainsType     (Node *cur_node, NodeType type);
+bool        OpNodeIsCommutativity   (Node *op_node);
+bool        IsInitialise            (Node *node);
+bool        IsBool                  (Node *node);
 
-void SyntaxError(Tree *tree, Node *cur_node, const char *error, const char *file, int line, const char *func);
+void        SyntaxError             (Tree *tree, Node *cur_node, const char *error, const char *file, int line, const char *func);
 
 #define SYNTAX_ERROR(tree, cur_token, error)  SyntaxError(tree, cur_token, error, __FILE__, __LINE__, __func__)
 

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "../tree/tree_lib.h"
+#include "tree_lib.h"
 
 #define BASE_SAVE_TREE_FILE_NAME  "../../res_tree.txt"
 

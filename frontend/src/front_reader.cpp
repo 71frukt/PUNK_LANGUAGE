@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string.h>
 
-#include "../../tree/tree_lib.h"
+#include "tree_lib.h"
 #include "front_reader.h"
 #include "semantic_anal.h"
 
@@ -67,7 +67,7 @@ void MakeTokens(Tree *tree, FILE *source)
             TreeElem_t val = POISON_VAL;
 
             fscanf(source, TREE_ELEM_SCANF_SPECIFIER "%n", &val, &shift);
-            cur_column += shift;
+            cur_column += (size_t) shift;
 
             Node *new_node = NewNode(tree, NUM, {.num = val}, NULL, NULL);
             new_node->born_column = cur_column;
@@ -82,7 +82,7 @@ void MakeTokens(Tree *tree, FILE *source)
             int shift = 0;
 
             fscanf(source, "%s%n", cur_token, &shift);
-            cur_column += shift;
+            cur_column += (size_t) shift;
 
             Node *new_node = GetNamedToken(tree, cur_token);
 
@@ -95,7 +95,7 @@ void MakeTokens(Tree *tree, FILE *source)
     }
 
     NewNode(tree, MANAGER, {.manager = &Managers[EOT]}, NULL, NULL);
-fprintf(stderr, "tree size = %lld\n\n", tree->size);
+fprintf(stderr, "tree size = %lu\n\n", tree->size);
     TREE_DUMP(tree);
 }
 
@@ -103,7 +103,7 @@ Node *GetNamedToken(Tree *tree, char *token_name)
 {
     fprintf(stderr, "cur_token = '%s'\n", token_name);
 
-    if (IsEngLetter(*token_name))                                                       // это имя функции или переменной
+    if (IsEngLetter(*token_name))
     {
         ProperName *cur_name_ptr = FindNameInTable(&tree->names_table, token_name);
 
@@ -115,7 +115,7 @@ Node *GetNamedToken(Tree *tree, char *token_name)
         return NewNode(tree, VAR_OR_FUNC, {.prop_name = cur_name_ptr}, NULL, NULL);
     }
 
-    else                                                                                // имя операнда или рандомный вкид
+    else
     {
         const MathOperation   *cur_op     = GetOperationBySymbol  (token_name, MY_CODE_MODE);
         const KeyWord         *key_word   = GetKeyWordBySymbol    (token_name, MY_CODE_MODE);
@@ -150,7 +150,7 @@ bool IsEngLetter(char ch) // isalpha
 
 bool IsCapitalLetter(char letter)
 {
-    return (letter >= 'А' && letter <= 'Я' );
+    return (letter >= 'ќ' && letter <= 'ќ' );
 }
 
 Node *GetCode(Tree *dest_tree)
@@ -165,7 +165,7 @@ Node *GetCode(Tree *dest_tree)
 
     while ( !(tokens[ip]->type == MANAGER && tokens[ip]->val.manager->name == EOT) )
     {
-        fprintf(stderr, "new func: ip = %lld\n", ip);
+        fprintf(stderr, "new func: ip = %lu\n", ip);
 
         Node *new_func = GetFuncInit(dest_tree, &ip);
 
@@ -310,7 +310,7 @@ Node *GetWhile(Tree *dest_tree, size_t *ip)
     return NewNode(dest_tree, KEY_WORD, {.key_word = &KeyWords[NEW_EXPR]}, while_node, NULL);
 }
 
-Node *GetExpr(Tree *dest_tree, size_t *ip)              // то, что отделяется ;
+Node *GetExpr(Tree *dest_tree, size_t *ip)
 {
         fprintf(stderr, "In GetExpr()\n");
 
@@ -353,7 +353,7 @@ fprintf(stderr, "Gett var. need arg\n");
     if (!(tokens[*ip]->type == KEY_WORD && tokens[*ip]->val.key_word->name == ASSIGN))
         return init_node;
 
-    RemoveNode(dest_tree, &tokens[(*ip)++]);    // при инициализации нода присваивания в дереве не нужна
+    RemoveNode(dest_tree, &tokens[(*ip)++]);    // ќќќ ќќќќќќќќќќќќќ ќќќќ ќќќќќќќќќќќќ ќ ќќќќќќ ќќ ќќќќќ
 
     init_node->right = GetBool(dest_tree, ip);
     
@@ -417,7 +417,7 @@ Node *GetAssign(Tree *dest_tree, size_t *ip)
         return GetBool(dest_tree, ip);
 
     Node *var_node  = GetVarOrFunc(dest_tree, ip);
-fprintf(stderr, "ip = %lld\n", *ip);
+fprintf(stderr, "ip = %lu\n", *ip);
     if (var_node->type != KEY_WORD || var_node->val.key_word->name != VAR_T_INDICATOR)
         SYNTAX_ERROR(dest_tree, var_node, "an attempt to assign a non-variable");
 
@@ -530,7 +530,7 @@ Node *GetPow(Tree *dest_tree, size_t *ip)
         return res_node;
 }
 
-Node *GetOp(Tree *dest_tree, size_t *ip)              // f(..) или f(.. , ..)
+Node *GetOp(Tree *dest_tree, size_t *ip)              // f(..) ќќќ f(.. , ..)
 {
     fprintf(stderr, "In GetOp()\n");
 
@@ -636,7 +636,7 @@ Node *GetVarOrFunc(Tree *dest_tree, size_t *ip)
         cur_node->type = VAR;
         Node *arg = NULL;
 
-        if (tokens[*ip]->type == MANAGER && tokens[*ip]->val.manager->name == OPEN_EXPR_BRACKET)     // тогда это вызов функции
+        if (tokens[*ip]->type == MANAGER && tokens[*ip]->val.manager->name == OPEN_EXPR_BRACKET)     // ќќќќќ ќќќ ќќќќќ ќќќќќќќ
         {
             fprintf(stderr, "3\n");
 

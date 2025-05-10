@@ -1,3 +1,5 @@
+#ifdef TREE_DEBUG
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -13,8 +15,8 @@ FILE *LogFile = OpenLogFile();
 FILE *OpenLogFile()
 {
     char logfile_path[PATH_NAME_LEN] = {};
-    GetFilePath(LOGFILE_NAME, LOGS_FOLDER, logfile_path);
-
+    GetFilePath(LOGFILE_NAME, LOGS_FOLDER_NAME, logfile_path);
+// fprintf(stderr, "logfile_path = '%s'\n", logfile_path);
     FILE *logfile = fopen(logfile_path, "w");
 
     setvbuf(logfile, NULL, _IONBF, 0);
@@ -47,7 +49,7 @@ void CloseLogFile()
 
 char *GetFilePath(const char *name, const char *folder, char *path)
 {
-    sprintf(path, "%s%s", folder, name);
+    sprintf(path, "%s/%s", folder, name);
     return path;
 }
 
@@ -61,13 +63,15 @@ void TreeDump(Tree *tree, const char *file, int line, const char *func)
 
     fprintf(LogFile, "   Tree '%s' TREE_DUMP called from %s:%d  (%s)\n  {\n", tree->name, file, line, func);
     char picture_name[PATH_NAME_LEN] = {};
-    sprintf(picture_name, "%s%s%s/%s%lld.png",LOGS_FOLDER, GRAPH_FOLDER, tree->name, GRAPH_NAME_PREFIX, drawn_graphs_num);
+    sprintf(picture_name, "%s/%s/%s%lu.png", GRAPH_FOLDER_NAME, tree->name, GRAPH_NAME_PREFIX, drawn_graphs_num);
 
     DrawGraph(tree, picture_name);
-    fprintf(LogFile, "<img src = %s%s/%s%lld.png width = \"%d%%\" style=\"margin-left: 3%%\">\n", GRAPH_FOLDER, tree->name, GRAPH_NAME_PREFIX, drawn_graphs_num, GRAPH_IMG_WIDTH);
-    // //fprintf(stderr,  "<img src = %s%s%d.png width = \"%d%%\" style=\"margin-left: 3%%\">\n", GRAPH_FOLDER, GRAPH_NAME_PREFIX, drawn_graphs_num, GRAPH_IMG_WIDTH);
+    fprintf(LogFile, "<img src = %s/%s/%s%lu.png width = \"%d%%\" style=\"margin-left: 3%%\">\n", GRAPH_FOLDER_NAME, tree->name, GRAPH_NAME_PREFIX, drawn_graphs_num, GRAPH_IMG_WIDTH);
+    // //fprintf(stderr,  "<img src = %s/%s%d.png width = \"%d%%\" style=\"margin-left: 3%%\">\n", GRAPH_FOLDER_NAME, GRAPH_NAME_PREFIX, drawn_graphs_num, GRAPH_IMG_WIDTH);
 
     fprintf(LogFile, "\n  }\n\n");
 
     drawn_graphs_num++;
 }
+
+#endif

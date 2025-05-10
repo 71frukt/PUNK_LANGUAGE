@@ -3,9 +3,9 @@
 
 #include <stdio.h>
 
-#include "../../tree/tree_lib.h"
+#include "tree_lib.h"
 
-const size_t ERROR_NAME_LEN = 100;
+// const size_t ERROR_NAME_LEN = 100;
 
 void SemanticAnal(Tree *tree);
 void CheckFuncsValidity(Tree *tree, Node *cur_node);

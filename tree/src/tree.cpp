@@ -6,11 +6,7 @@
 #include <sys/stat.h>
 #include <assert.h>
 
-#include "tree.h"
-#include "tree_debug.h"
-#include "tree_graph.h"
-#include "operations.h"
-#include "../../frontend/lib/semantic_anal.h"
+#include "tree_lib.h"
 
 void TreeCtor(Tree *tree, size_t start_capacity ON_TREE_DEBUG(, const char *name))
 { 
@@ -28,9 +24,9 @@ void TreeCtor(Tree *tree, size_t start_capacity ON_TREE_DEBUG(, const char *name
         tree->name = name;
 
         char path[PATH_NAME_LEN] = {};
-        GetFilePath(name, LOGS_FOLDER GRAPH_FOLDER, path);
+        GetFilePath(name, GRAPH_FOLDER_NAME, path);
 
-        mkdir(path);
+        mkdir(path, 0755); 
     );
 }
 
@@ -261,10 +257,11 @@ ProperName *NewNameInTable(NamesTable *table, char *name)
     }
 
     table->names[table->size].number = table->size;
-    strncpy(table->names[table->size].name, name, TOKEN_LEN);
+    strncpy(table->names[table->size].name, name, TOKEN_LEN - 1);
+    table->names[table->size].name[TOKEN_LEN - 1] = 0;
 
-    table->names[table->size].is_init = false;                  // проверка на семантику после построения дерева
-
+    table->names[table->size].is_init = false;
+    
     return &table->names[table->size++];
 }
 
@@ -284,7 +281,7 @@ void GetBlockNamesTable(Tree *tree, Node *block, Node *cur_node)
     else if (cur_node->type == VAR)
     {
         ProperName *cur_name = FindNameInBlock(block, cur_node->val.prop_name->name);
-        // fprintf(stderr, "use of inited var named '%s', num = %lld\n", cur_name->name, cur_name->number);
+        // fprintf(stderr, "use of inited var named '%s', num = %lu\n", cur_name->name, cur_name->number);
 
         if (cur_name == NULL)
         {
@@ -301,7 +298,7 @@ void GetBlockNamesTable(Tree *tree, Node *block, Node *cur_node)
         assert(named_node->type == VAR || named_node->type == FUNC);
 
         ProperName *cur_name = FindNameInBlock(block, named_node->val.prop_name->name);
-        // fprintf(stderr, "use of inited var named '%s', num = %lld\n", cur_name->name, cur_name->number);
+        // fprintf(stderr, "use of inited var named '%s', num = %lu\n", cur_name->name, cur_name->number);
 
         if (cur_name != NULL)
         {
@@ -351,7 +348,7 @@ void MakeNamesTablesForBlocks(Tree *tree, Node *cur_node)
         func_node->val.prop_name->is_init = true;
         func_node->val.prop_name->args_count = GetCountOfArgs(cur_node->left->left);
 
-        fprintf(stderr, "count of args = %lld\n\n", func_node->val.prop_name->args_count);
+        fprintf(stderr, "count of args = %lu\n\n", func_node->val.prop_name->args_count);
 
         GetBlockNamesTable(tree, block_node, cur_node->left->left->right);
 
@@ -359,10 +356,10 @@ void MakeNamesTablesForBlocks(Tree *tree, Node *cur_node)
 
         MakeNamesTablesForBlocks(tree, cur_node->right);
 
-        fprintf(stderr, "size of names table = %lld\n", block_node->val.block.names_table.size);
+        fprintf(stderr, "size of names table = %lu\n", block_node->val.block.names_table.size);
         for (size_t i = 0; i < block_node->val.block.names_table.size; i++)
         {
-            fprintf(stderr, "init node = '%s', num = %lld\n", block_node->val.block.names_table.names[i].name, block_node->val.block.names_table.names[i].number);
+            fprintf(stderr, "init node = '%s', num = %lu\n", block_node->val.block.names_table.names[i].name, block_node->val.block.names_table.names[i].number);
         }
     }
 
@@ -381,7 +378,7 @@ void MakeNamesTablesForBlocks(Tree *tree, Node *cur_node)
 
         for (size_t i = 0; i < cur_node->val.block.names_table.size; i++)
         {
-            fprintf(stderr, "init node = '%s', num = %lld\n", cur_node->val.block.names_table.names[i].name, cur_node->val.block.names_table.names[i].number + cur_node->val.block.shift);
+            fprintf(stderr, "init node = '%s', num = %lu\n", cur_node->val.block.names_table.names[i].name, cur_node->val.block.names_table.names[i].number + cur_node->val.block.shift);
         }
 
         tree->cur_block = tree->cur_block->val.block.prev_block;  
@@ -480,7 +477,7 @@ bool SubtreeContainsType(Node *cur_node, NodeType type)
         bool right_subtree_cont_type = false;
 
         // if (cur_node->type == MATH_OP && GetOperationByNode(cur_node)->type == BINARY)
-        if (cur_node->type == MATH_OP && cur_node->val.math_op->type == BINARY)       // чтобы не проходить одну и ту же ветку дважды для унарной операции
+        if (cur_node->type == MATH_OP && cur_node->val.math_op->type == BINARY)       
             right_subtree_cont_type = SubtreeContainsType(cur_node->right, type);
 
         return (left_subtree_cont_type || right_subtree_cont_type);
@@ -498,7 +495,7 @@ void SyntaxError(Tree *tree, Node *cur_node, const char *error, const char *file
     TREE_DUMP(tree);
 
     fprintf(stderr, "SyntaxError called in %s:%d %s()\n"
-                    "Error: %s   ( position %lld:%lld )",
+                    "Error: %s   (position %lu:%lu)\n",
                     file, line, func, error, cur_node->born_line, cur_node->born_column);
 
                     // Syntax error: forgot to put ) here (file ...,line ...)   // TODO ??

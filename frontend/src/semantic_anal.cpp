@@ -3,7 +3,7 @@
 
 #include "front_reader.h"
 #include "semantic_anal.h"
-#include "../../tree/tree_lib.h"
+#include "tree_lib.h"
 
 void SemanticAnal(Tree *tree)
 {
@@ -56,7 +56,7 @@ void CheckFuncsValidity(Tree *tree, Node *cur_node)
 //     TREE_DUMP(tree);
 
 //     fprintf(stderr, "SyntaxError called in %s:%d %s()\n"
-//                     "Error: %s   ( position %lld:%lld )",
+//                     "Error: %s   ( position %lu:%lu )",
 //                     file, line, func, error, cur_node->born_line, cur_node->born_column);
 
 //                     // Syntax error: forgot to put ) here (file ...,line ...)   // TODO ??

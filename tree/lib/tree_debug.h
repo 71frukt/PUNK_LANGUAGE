@@ -12,8 +12,9 @@
 #define TREE_DUMP(tree)
 #endif
 
-#define LOGS_FOLDER      "logs/"
-#define GRAPH_FOLDER     "graphs/"
+// #define BUILD_FOLDER_NAME     "build"
+// #define LOGS_FOLDER_NAME      BUILD_FOLDER_NAME "/" "logs"
+// #define GRAPH_FOLDER_NAME     LOGS_FOLDER_NAME "/" "graphs"
 
 #define LOGFILE_NAME     "tree_logfile.html"
 const int PATH_NAME_LEN   = 100;

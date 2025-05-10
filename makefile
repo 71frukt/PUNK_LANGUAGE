@@ -3,23 +3,23 @@
 all: frontend middlend backend tree
 
 frontend:
-	@echo "Сборка frontend"
+	@echo "building frontend"
 	$(MAKE) -C frontend
 
 middlend:
-	@echo "Сборка middlend"
+	@echo "building middlend"
 	$(MAKE) -C middlend
 
 backend:
-	@echo "Сборка backend"
+	@echo "building backend"
 	$(MAKE) -C backend
 
 tree:
-	@echo "Сборка tree"
+	@echo "building tree"
 	$(MAKE) -C tree
 
 clean:
-	@echo "Очистка всех подпроектов"
+	@echo "cleaning frontend, middlend and backend"
 	$(MAKE) -C frontend clean
 	$(MAKE) -C middlend clean
 	$(MAKE) -C backend clean

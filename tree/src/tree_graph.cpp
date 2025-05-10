@@ -25,8 +25,6 @@ void DrawGraph(Tree *tree, char *dest_picture_path)
     fclose(dot_file);
 
     MakeGraphPicture(TMP_DOTFILE_NAME, dest_picture_path);
-
-    fclose(dot_file);
 }
 
 void InitNodesInDot(Tree *tree, FILE *dot_file)

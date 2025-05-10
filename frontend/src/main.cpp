@@ -4,19 +4,20 @@
 #include "front_reader.h"
 #include "semantic_anal.h"
 
-#include "../../tree/tree_lib.h"
-#include "../../tree_saver/tree_saver.h"
+#include "tree_lib.h"
+#include "tree_saver.h"
+
 
 int main(const int argc, const char *argv[])
 {
-    fprintf(stderr, "START\n");
+    fprintf(stderr, "FRONTEND START\n");
 
     FILE *input_file = GetInputCodeFile(argc, argv);
 
     Tree code = {};
     TreeCtor(&code, START_TREE_SIZE ON_TREE_DEBUG(, "expr_tree"));
 
-    BuildTreeByCode(&code, input_file);
+    // BuildTreeByCode(&code, input_file);
 
     fclose(input_file);
 
@@ -28,6 +29,6 @@ int main(const int argc, const char *argv[])
 
     TreeDtor(&code);
 
-    fprintf(stderr, "END");
+    fprintf(stderr, "FRONTEND END\n\n");
     return 0;
 }
