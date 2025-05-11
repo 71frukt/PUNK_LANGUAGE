@@ -19,15 +19,15 @@ SUBMAKES_FLAGS = $(foreach archive,$(ARCHIVES_NAMES), $(shell echo $(archive) | 
 
 
 #------------ dirs ------------------------------------------------------------------------
-FRONTEND_SRC_DIR   = src
-FRONTEND_BUILD_DIR = build
-FRONTEND_OBJ_DIR   = $(FRONTEND_BUILD_DIR)/obj
-FRONTEND_DEP_DIR   = $(FRONTEND_BUILD_DIR)/.deps
+SRC_DIR   = src
+BUILD_DIR = build
+OBJ_DIR   = $(BUILD_DIR)/obj
+DEP_DIR  = $(BUILD_DIR)/.deps
 
-LOGS_DIR	  	   = $(FRONTEND_BUILD_DIR)/logs
+LOGS_DIR	  	   = $(BUILD_DIR)/logs
 GRAPH_DIR	  	   = $(LOGS_DIR)/graphs
 
-RELEASE_DIRS_MK    = FRONTEND_SRC_DIR FRONTEND_BUILD_DIR FRONTEND_OBJ_DIR FRONTEND_DEP_DIR
+RELEASE_DIRS_MK    = SRC_DIR BUILD_DIR OBJ_DIR DEP_DIR
 DEBUG_DIRS_MK	   = LOGS_DIR GRAPH_DIR
 #------------------------------------------------------------------------------------------
 
@@ -38,10 +38,10 @@ DEFINE_VARS =
 #------------------------------------------------------------------------------------------
 
 
-ARCHIVES_DEBUG_FLAGS = $(foreach project,$(ARCHIVES_NAMES),-D $(shell echo $(project) | tr '[:lower:]' '[:upper:]')_DEBUG)
-ARCHIVE_NAMES_FLAGS  = $(addprefix -l,   $(ARCHIVES_NAMES))
-ARCHIVES_DIRS_LIBS   = $(addsuffix /lib, $(ARCHIVES_DIRS))
-ARCHIVES_DIRS_FLAGS  = $(foreach arch_dir, $(ARCHIVES_DIRS), -L$(arch_dir)/$(FRONTEND_OBJ_DIR))
+ARCHIVES_DEBUG_FLAGS = $(foreach project,  $(ARCHIVES_NAMES),-D $(shell echo $(project) | tr '[:lower:]' '[:upper:]')_DEBUG)
+ARCHIVE_NAMES_FLAGS  = $(addprefix -l,     $(ARCHIVES_NAMES))
+ARCHIVES_DIRS_LIBS   = $(addsuffix /lib,   $(ARCHIVES_DIRS))
+ARCHIVES_DIRS_FLAGS  = $(foreach arch_dir, $(ARCHIVES_DIRS), -L$(arch_dir)/$(OBJ_DIR))
 
 DEFINE_VARS_FLAGS 	 = $(foreach var,$(DEFINE_VARS),-D $(var)=$($(var)))
 
@@ -52,13 +52,14 @@ INCLUDES      = lib $(ARCHIVES_DIRS_LIBS)
 INCLUDE_FLAGS = $(addprefix -I ,$(INCLUDES))
 
 
-FRONTEND_CPP  = $(wildcard $(FRONTEND_SRC_DIR)/*.cpp)
-FRONTEND_OBJ  = $(patsubst $(FRONTEND_SRC_DIR)/%.cpp,$(FRONTEND_OBJ_DIR)/%.o,$(FRONTEND_CPP))
-FRONTEND_DEP  = $(patsubst $(FRONTEND_SRC_DIR)/%.cpp,$(FRONTEND_DEP_DIR)/%.d,$(FRONTEND_CPP))
+THIS_PROJ_CPP  = $(wildcard $(SRC_DIR)/*.cpp)
+THIS_PROJ_OBJ  = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(THIS_PROJ_CPP))
+THIS_PROJ_DEP  = $(patsubst $(SRC_DIR)/%.cpp,$(DEP_DIR)/%.d,$(THIS_PROJ_CPP))
 
-DEPFLAGS = -MT $@ -MMD -MP -MF $(FRONTEND_DEP_DIR)/$*.d
+DEPFLAGS = -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
 
-TARGET   = $(FRONTEND_BUILD_DIR)/frontend 
+EXECUTABLE ?= frontend
+TARGET      = $(BUILD_DIR)/$(EXECUTABLE) 
 
 FLAGS  = -Wall -Wextra -Weffc++ -Waggressive-loop-optimizations -Wc++14-compat -Wmissing-declarations -Wcast-align -Wcast-qual                									\
  -Wchar-subscripts -Wconditionally-supported -Wconversion -Wctor-dtor-privacy -Wempty-body -Wfloat-equal -Wformat-nonliteral -Wformat-security -Wformat-signedness               \
@@ -82,9 +83,9 @@ FLAGS += $(DEFINE_VARS_FLAGS)
 
 #-------------------- targets -------------------------------------------------------
 
-.PHONY: all clean rebuild
+.PHONY: all clean rebuild build_libs
 
-all: $(TARGET) $(if $(USE_DEBUG), $(foreach dir, $(DEBUG_DIRS_MK), $($(dir))))
+all: $(TARGET) $(foreach dir, $(RELEASE_DIRS_MK), $($(dir)))  $(if $(USE_DEBUG), $(foreach dir, $(DEBUG_DIRS_MK), $($(dir))))
 
 run:
 	$(TARGET)
@@ -93,27 +94,34 @@ gdb:
 	gdb $(TARGET)
 
 clean:
-	rm -rf $(FRONTEND_BUILD_DIR)
+	rm -rf $(BUILD_DIR)
 	
 rebuild: clean all
 
 rebuild_all: rebuild_libs rebuild
-	
+
+build_libs:
+	$(foreach i, $(shell seq 1 $(words $(ARCHIVES_DIRS))), 					\
+		$(eval dir   := $(word $(i),   $(ARCHIVES_DIRS))) 					\
+		$(eval flags := $(word $(i),   $(SUBMAKES_FLAGS)))  				\
+		$(MAKE) -C $(dir) USE_DEBUG=$(USE_DEBUG) $($(flags)); 			\
+	)
+
 rebuild_libs:
-	$(foreach i, $(shell seq 1 $(words $(ARCHIVES_DIRS))), 				\
-		$(eval dir   := $(word $(i),$(ARCHIVES_DIRS))) 					\
-		$(eval flags := $(word $(i),$(SUBMAKES_FLAGS)))  				\
-		$(MAKE) rebuild -C $(dir) USE_DEBUG=$(USE_DEBUG) $($(flags)); 	\
+	$(foreach i, $(shell seq 1 $(words $(ARCHIVES_DIRS))), 					\
+		$(eval dir   := $(word $(i),   $(ARCHIVES_DIRS))) 					\
+		$(eval flags := $(word $(i),   $(SUBMAKES_FLAGS)))  				\
+		$(MAKE) rebuild -C $(dir) USE_DEBUG=$(USE_DEBUG) $($(flags));	\
 	)
 
 
-$(TARGET): $(FRONTEND_OBJ)
-	$(CXX) $(CXXFLAGS) $(FLAGS) $^ $(ARCHIVES_DIRS_FLAGS) $(ARCHIVE_NAMES_FLAGS) -o $@
+$(TARGET): build_libs $(THIS_PROJ_OBJ)
+	@$(CXX) $(CXXFLAGS) $(FLAGS) $(THIS_PROJ_OBJ) $(ARCHIVES_DIRS_FLAGS) $(ARCHIVE_NAMES_FLAGS) -o $@
 
-$(FRONTEND_OBJ_DIR)/%.o: $(FRONTEND_SRC_DIR)/%.cpp | $(FRONTEND_OBJ_DIR) $(FRONTEND_DEP_DIR)
-	$(CXX) $(FLAGS) $(addprefix -I ,$(INCLUDES)) $(DEPFLAGS) -c $< -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR) $(DEP_DIR)
+	@$(CXX) $(FLAGS) $(addprefix -I ,$(INCLUDES)) $(DEPFLAGS) -c $< -o $@
 
--include $(FRONTEND_DEP)
+-include $(THIS_PROJ_DEP)
 
 $(foreach dir, $(RELEASE_DIRS_MK), $(eval $($(dir)): ; @mkdir -p $$@))
 $(foreach dir, $(DEBUG_DIRS_MK),   $(eval $($(dir)): ; @mkdir -p $$@))

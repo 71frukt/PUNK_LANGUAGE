@@ -36,7 +36,7 @@ void TreeDtor(Tree *tree)
 
     TREE_DUMP(tree);
 
-    NamesTableDtor(&tree->names_table);
+    TreeNamesTablesDtor(tree);
 
     for (size_t i = 0; i < tree->alloc_marks.size; i++)
         free(tree->alloc_marks.data[i]);
@@ -56,13 +56,32 @@ void TreeDtor(Tree *tree)
 
 void NamesTableCtor(size_t start_capa, NamesTable *table)
 {
+    assert(table);
+
     table->capacity = start_capa;
     table->size     = 0;
     table->names    = (ProperName *) calloc(start_capa, sizeof(ProperName));
 }
 
+void TreeNamesTablesDtor(Tree *tree)
+{
+    assert(tree);
+
+    NamesTableDtor(&tree->names_table);
+
+    for (size_t i = 0; i < tree->size; i++)
+    {
+        Node *cur_node = tree->node_ptrs[i];
+
+        if (cur_node && cur_node->type == NEW_BLOCK)
+            NamesTableDtor(&cur_node->val.block.names_table);
+    }
+}
+
 void NamesTableDtor(NamesTable *table)
 {
+    assert(table);
+
     free(table->names);
 
     table->capacity = 0;
@@ -117,9 +136,6 @@ void RemoveNode(Tree *tree, Node **node)
     assert(tree);
     assert(node);
     assert(*node);
-
-    // if ((*node)->type == CHANGE)
-    //     RemoveSubtree(tree, &(*node)->val.change->target_node);
 
     (*node)->left    = NULL;
     (*node)->right   = NULL;
@@ -195,7 +211,6 @@ Node *TreeCopyPaste(Tree *source_tree, Tree *dest_tree, Node *coping_node)
 
         pasted_node->left  = TreeCopyPaste(source_tree, dest_tree, coping_node->left);
 
-        // if (GetOperationByNode(pasted_node)->type == BINARY)
         if (pasted_node->val.math_op->type == BINARY)
             pasted_node->right = TreeCopyPaste(source_tree, dest_tree, coping_node->right);
 
@@ -337,6 +352,7 @@ void MakeNamesTablesForBlocks(Tree *tree, Node *cur_node)
 
     if (cur_node == NULL)
         return;
+fprintf(stderr, "tree size = %lu\n\n", tree->size);
 
     if (cur_node->type == KEY_WORD && cur_node->val.key_word->name == NEW_FUNC)
     {

@@ -134,6 +134,7 @@ void        MakeNamesTablesForBlocks(Tree *tree, Node *cur_node);
 Node       *GetNodeInfoBySymbol     (char *sym, Tree *tree, Node *cur_node, SymbolMode mode);
 
 void        NamesTableCtor          (size_t start_capa, NamesTable *table);
+void        TreeNamesTablesDtor     (Tree *tree);
 void        NamesTableDtor          (NamesTable *table);
 
 size_t      GetCountOfArgs          (Node *func_node);

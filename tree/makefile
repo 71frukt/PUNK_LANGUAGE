@@ -15,8 +15,8 @@ TREE_BUILD_DIR 	= build
 TREE_OBJ_DIR   	= $(TREE_BUILD_DIR)/obj
 TREE_DEP_DIR   	= $(TREE_BUILD_DIR)/.deps
 
-LOGS_DIR	  	?= popa_log
-GRAPH_DIR	  	?= popa_graph
+LOGS_DIR	  	?= logs
+GRAPH_DIR	  	?= graphs
 
 RELEASE_DIRS_MK = TREE_SRC_DIR TREE_BUILD_DIR TREE_OBJ_DIR TREE_DEP_DIR
 DEBUG_DIRS_MK	=
@@ -79,7 +79,7 @@ FLAGS += $(DEFINE_VARS_FLAGS)
 
 .PHONY: all clean rebuild
 
-all: $(TARGET_ARCHIVE) $(if $(USE_DEBUG), $(foreach dir, $(DEBUG_DIRS_MK), $($(dir))))
+all: $(TARGET_ARCHIVE) $(foreach dir, $(RELEASE_DIRS_MK), $($(dir))) $(if $(USE_DEBUG), $(foreach dir, $(DEBUG_DIRS_MK), $($(dir))))
 
 $(TARGET_ARCHIVE): $(TREE_OBJ)
 	ar rcs $@ $^

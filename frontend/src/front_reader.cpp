@@ -150,7 +150,7 @@ bool IsEngLetter(char ch) // isalpha
 
 bool IsCapitalLetter(char letter)
 {
-    return (letter >= 'ù' && letter <= 'ù' );
+    return (letter >= '¿' && letter <= 'ﬂ');
 }
 
 Node *GetCode(Tree *dest_tree)
@@ -222,11 +222,8 @@ Node *GetFuncInit(Tree *dest_tree, size_t *ip)
 
 Node *GetBlock(Tree *dest_tree, size_t *ip)
 {
-                    fprintf(stderr, "In GetBlock()\n");
-
     assert(dest_tree);
     assert(ip);
-    // TREE_DUMP(dest_tree);
 
     Node **tokens = dest_tree->node_ptrs;
 
@@ -254,8 +251,6 @@ Node *GetBlock(Tree *dest_tree, size_t *ip)
 
 Node *GetIf(Tree *dest_tree, size_t *ip)
 {
-                fprintf(stderr, "In GetIf()\n");
-
     assert(dest_tree);
     assert(ip);
 
@@ -353,7 +348,7 @@ fprintf(stderr, "Gett var. need arg\n");
     if (!(tokens[*ip]->type == KEY_WORD && tokens[*ip]->val.key_word->name == ASSIGN))
         return init_node;
 
-    RemoveNode(dest_tree, &tokens[(*ip)++]);    // ùùù ùùùùùùùùùùùùù ùùùù ùùùùùùùùùùùù ù ùùùùùù ùù ùùùùù
+    RemoveNode(dest_tree, &tokens[(*ip)++]);    // ÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩ
 
     init_node->right = GetBool(dest_tree, ip);
     
@@ -530,7 +525,7 @@ Node *GetPow(Tree *dest_tree, size_t *ip)
         return res_node;
 }
 
-Node *GetOp(Tree *dest_tree, size_t *ip)              // f(..) ùùù f(.. , ..)
+Node *GetOp(Tree *dest_tree, size_t *ip)              // f(..) ÔøΩÔøΩÔøΩ f(.. , ..)
 {
     fprintf(stderr, "In GetOp()\n");
 
@@ -630,21 +625,16 @@ Node *GetVarOrFunc(Tree *dest_tree, size_t *ip)
 
     if (tokens[*ip]->type == VAR_OR_FUNC)
     {
-        fprintf(stderr, "1\n");
-
         Node *cur_node = tokens[(*ip)++];
         cur_node->type = VAR;
         Node *arg = NULL;
 
-        if (tokens[*ip]->type == MANAGER && tokens[*ip]->val.manager->name == OPEN_EXPR_BRACKET)     // ùùùùù ùùù ùùùùù ùùùùùùù
+        if (tokens[*ip]->type == MANAGER && tokens[*ip]->val.manager->name == OPEN_EXPR_BRACKET)     // ÍÓÔËˇ ‰Îˇ swap Ô‡ÏˇÚË
         {
-            fprintf(stderr, "3\n");
-
             RemoveNode(dest_tree, &tokens[(*ip)++]);
 
             cur_node->type = FUNC;
             arg = GetExprSequence(dest_tree, ip);
-            fprintf(stderr, "3.1\n");
 
             if (tokens[*ip]->type != MANAGER || tokens[*ip]->val.manager->name != CLOSE_EXPR_BRACKET)
                 SYNTAX_ERROR(dest_tree, tokens[*ip], Managers[CLOSE_EXPR_BRACKET].my_symbol);
@@ -658,16 +648,12 @@ Node *GetVarOrFunc(Tree *dest_tree, size_t *ip)
 
         else
         {
-            fprintf(stderr, "4\n");
             return NewNode(dest_tree, KEY_WORD, {.key_word = &KeyWords[VAR_T_INDICATOR]}, cur_node, arg);
         }
     }
 
     else
-    {
-        fprintf(stderr, "2\n");
         return GetScanf(dest_tree, ip);
-    }
 }
 
 Node *GetScanf(Tree *dest_tree, size_t *ip)

@@ -1,8 +1,8 @@
 #include <stdio.h>
 
 #include "back_writer.h"
-#include "../../tree/tree_lib.h"
-#include "../../tree_saver/tree_saver.h"
+#include "tree_lib.h"
+#include "tree_saver.h"
 
 int main(const int argc, const char *argv[])
 {
@@ -23,6 +23,8 @@ int main(const int argc, const char *argv[])
 
     PrintAsmCodeByNode(source_tree.root_ptr, asm_file);
 
+    TreeDtor(&source_tree);
+    
     fprintf(stderr, "BACKEND_END\n");
 
     return 0;

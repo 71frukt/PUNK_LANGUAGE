@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#include "../../tree/tree_lib.h"
+#include "tree_lib.h"
 
 void  SimplifyTree      (Tree *code_tree);
 

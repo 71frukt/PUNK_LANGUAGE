@@ -3,9 +3,9 @@
 
 #include <stdio.h>
 
-#include "../../tree/tree_lib.h"
+#include "../../tree/lib/tree_lib.h"
 
-#define BASE_OUTPUT_ASM_FILE_NAME  "../../executable.asm"
+#define BASE_OUTPUT_ASM_FILE_NAME  "../../res_asm.asm"
 
 #define MAIN_FUNC_NAME  "MAIN_HOI"
 
@@ -29,23 +29,23 @@ struct MathOpAsmInfo
 
 const MathOpAsmInfo MathOpAsmInfos[MATH_OPERATIONS_NUM] = 
 {
-    { BOOL_EQ,      "JNE" },
-    { BOOL_NEQ,     "JE"  },
-    { BOOL_GREATER, "JB"  },
-    { BOOL_LOWER,   "JA"  },
-    { ADD,          "ADD" },
-    { SUB,          "SUB" },
-    { MUL,          "MUL" },
-    { DIV,          "DIV" },
+    { BOOL_EQ,      "JNE"  },
+    { BOOL_NEQ,     "JE"   },
+    { BOOL_GREATER, "JB"   },
+    { BOOL_LOWER,   "JA"   },
+    { ADD,          "ADD"  },
+    { SUB,          "SUB"  },
+    { MUL,          "MUL"  },
+    { DIV,          "DIV"  },
     { SQRT,         "SQRT" },
-    { DEG,          NULL  },
+    { DEG,          NULL   },
   
-    { LN,           NULL  },
-    { LOG,          NULL  },
+    { LN,           NULL   },
+    { LOG,          NULL   },
   
-    { SIN,          "SIN" },
-    { COS,          "COS" },
-    { TAN,          "TG"  }
+    { SIN,          "SIN"  },
+    { COS,          "COS"  },
+    { TAN,          "TG"   }
 };
 
 //---------------------------------------------------------------------------------------------------------------//

@@ -17,7 +17,7 @@ int main(const int argc, const char *argv[])
     Tree code = {};
     TreeCtor(&code, START_TREE_SIZE ON_TREE_DEBUG(, "expr_tree"));
 
-    // BuildTreeByCode(&code, input_file);
+    BuildTreeByCode(&code, input_file);
 
     fclose(input_file);
 

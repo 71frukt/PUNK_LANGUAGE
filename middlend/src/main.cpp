@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "../../tree_saver/tree_saver.h"
+#include "tree_saver.h"
 #include "simplifier.h"
 
 int main(const int argc, const char *argv[])
