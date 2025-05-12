@@ -5,7 +5,7 @@
 
 #include "../../tree/lib/tree_lib.h"
 
-#define BASE_OUTPUT_ASM_FILE_NAME  "../../res_asm.asm"
+#define BASE_OUTPUT_ASM_FILE_NAME  "../res_asm.asm"
 
 #define MAIN_FUNC_NAME  "MAIN_HOI"
 

@@ -1,6 +1,6 @@
 USE_DEBUG ?= true
 
-RES_ASM_NAME = ../run_circle.asm
+RES_ASM_NAME = ../../res_asm.asm 		# the path relative to the compiler folder
 SUBPROJECTS  = frontend middlend backend tree tree_saver compiler spu
 
 # *proj_name in capital letters*_DIR = ***

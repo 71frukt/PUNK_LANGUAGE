@@ -2,7 +2,7 @@
 
 #include "tree_lib.h"
 
-#define BASE_SAVE_TREE_FILE_NAME  "../../res_tree.txt"
+#define BASE_SAVE_TREE_FILE_NAME  "../res_tree.txt"
 
 FILE *GetInputSaveFile   (const int argc, const char *argv[]);
 FILE *GetOutputSaveFile  (const int argc, const char *argv[]);
